@@ -24,27 +24,44 @@ int main() {
 	int move;
 	int countPlayer = 0;
 	int countComputer = 0;
+	int countTie = 0;
 	
 	vector<string> jankenpon = { PI, PA, TI };
-	vector<string> board(NUM_SPACES, EMPTY);
+	
 
 	//vector<string> board = { PI, PA, " "};
 
-	menu();
-	move = humanMove();
-	board[move] = jankenpon[move];
+	while (countPlayer < 2 && countComputer < 2 && countTie != TIE) {
+		
+		vector<string> board(NUM_SPACES, EMPTY);
+		
+		menu();
 
-	move = computerMove();
-	board[move] = jankenpon[move];
+		move = humanMove();
+		board[move] = jankenpon[move];
 
-	if (computerMove() == winner(board)) {
-		countComputer++;
+		move = computerMove();
+		board[move] = jankenpon[move];
+
+		
+		if (winner(board) == TIE) {
+			countTie++;
+		} 
+		else if (computerMove() == winner(board)) {
+			countComputer++;
+		}
+		else {
+			countPlayer++;
+		}
+
+		
+		cout << "\n" << winner(board);
+
+		displayScore(board, countPlayer, countComputer);
+
+		
 	}
-	else {
-		countPlayer++;
-	}
-
-	displayScore(board, countPlayer, countComputer);
+	
 }
 
 void menu() {
@@ -62,7 +79,11 @@ void displayScore(vector<string>& board, int countPlayer, int countComputer) {
 
 	for (int i = 0; i < board.size(); i++) {
 		if (board[i] != EMPTY) {
-			cout << board[i] << " \t ";
+			cout << board[i] << " \t";
+		}
+
+		if (count(board.begin(), board.end(), EMPTY) == 2) {
+			cout << board[i];
 		}
 	}
 }	

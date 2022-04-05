@@ -22,6 +22,7 @@ void displayScore(vector<string>& board, int countPlayer, int countComputer, int
 int winner(vector<string>& board);
 
 int main() {
+	setlocale(LC_ALL, "spanish");
 	const int NUM_SPACES = 3;
 	int movePlayer; //Move Player
 	int moveComputer; //Move Computer
@@ -95,13 +96,13 @@ void displayScore(vector<string>& board, int countPlayer, int countComputer, int
 void winnerAnnouncement(int countPlayer, int countComputer, int countTie) {
 	
 	if (countTie == TIE) {
-		cout << "EMPATE";
+		cout << "\nEMPATE\n";
 	}
 	else if (countPlayer == ROUNDS_TO_WIN) {
-		cout << "¡¡GANASTE!!";
+		cout << "\n¡¡GANASTE!!\n";
 	}
 	else {
-		cout << "PERDISTE :(";
+		cout << "\nPERDISTE :(\n";
 	}
 }
 
@@ -122,6 +123,7 @@ int humanMove() {
 }
 
 int computerMove() {
+	srand(time(0));
 	int numRand = rand();
 	int move = ((numRand % 3));
 	return move;

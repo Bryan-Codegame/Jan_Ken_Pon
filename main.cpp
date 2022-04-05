@@ -6,6 +6,7 @@
 
 using namespace std;
 
+const int ROUNDS_TO_WIN = 2;
 const string EMPTY = " ";
 const string PI = "Piedra";
 const string PA = "Papel";
@@ -14,54 +15,52 @@ const int TIE = 3;
 
 void menu();
 int askNumber(string question, int high, int low = 1);
+void winnerAnnouncement(int countPlayer, int countComputer, int countTie);
 int humanMove();
 int computerMove();
-void displayScore(vector<string>& board, int countPlayer, int countComputer);
+void displayScore(vector<string>& board, int countPlayer, int countComputer, int moveP, int moveC);
 int winner(vector<string>& board);
 
 int main() {
 	const int NUM_SPACES = 3;
-	int move;
+	int movePlayer; //Move Player
+	int moveComputer; //Move Computer
 	int countPlayer = 0;
 	int countComputer = 0;
 	int countTie = 0;
 	
 	vector<string> jankenpon = { PI, PA, TI };
 	
+	cout << "\nBIENVENIDO A PIEDRA-PAPEL-TIJERA\n";
 
-	//vector<string> board = { PI, PA, " "};
-
-	while (countPlayer < 2 && countComputer < 2 && countTie != TIE) {
+	while (countPlayer < ROUNDS_TO_WIN && countComputer < ROUNDS_TO_WIN && countTie != TIE) {
 		
 		vector<string> board(NUM_SPACES, EMPTY);
 		
 		menu();
 
-		move = humanMove();
-		board[move] = jankenpon[move];
+		movePlayer = humanMove();
+		board[movePlayer] = jankenpon[movePlayer];
 
-		move = computerMove();
-		board[move] = jankenpon[move];
+		moveComputer = computerMove();
+		board[moveComputer] = jankenpon[moveComputer];
 
 		
 		if (winner(board) == TIE) {
 			countTie++;
 		} 
-		else if (computerMove() == winner(board)) {
+		else if (moveComputer == winner(board)) {
 			countComputer++;
 		}
 		else {
 			countPlayer++;
 		}
 
-		
-		cout << "\n" << winner(board);
-
-		displayScore(board, countPlayer, countComputer);
-
+		displayScore(board, countPlayer, countComputer, movePlayer, moveComputer);
 		
 	}
 	
+	winnerAnnouncement(countPlayer, countComputer, countTie);
 }
 
 void menu() {
@@ -72,12 +71,17 @@ void menu() {
 }
 
 
-void displayScore(vector<string>& board, int countPlayer, int countComputer) {
+void displayScore(vector<string>& board, int countPlayer, int countComputer, int moveP, int moveC) {
 	
+	cout << "\n--------------------------------------------";
 	cout << "\n" << countPlayer << " \t " << countComputer;
-	cout << "\nPlayer \t Computer\n";
+	cout << "\nPlayer \t Computer";
+	cout << "\n" << board[moveP] << " \t " << board[moveC];
+	cout << "\n--------------------------------------------\n";
 
-	for (int i = 0; i < board.size(); i++) {
+	//TODO: Está imprimiendo el orden es decir si yo elijo tijera y le compu papel entonces imprime en este orden {"", papel, tijera} dandole al player papel en lugar de lo que eligió.
+	//Esta función tiene que saber que escogió el jugador y que escogió la computadora
+	/*for (int i = 0; i < board.size(); i++) {
 		if (board[i] != EMPTY) {
 			cout << board[i] << " \t";
 		}
@@ -85,8 +89,21 @@ void displayScore(vector<string>& board, int countPlayer, int countComputer) {
 		if (count(board.begin(), board.end(), EMPTY) == 2) {
 			cout << board[i];
 		}
-	}
+	}*/
 }	
+
+void winnerAnnouncement(int countPlayer, int countComputer, int countTie) {
+	
+	if (countTie == TIE) {
+		cout << "EMPATE";
+	}
+	else if (countPlayer == ROUNDS_TO_WIN) {
+		cout << "¡¡GANASTE!!";
+	}
+	else {
+		cout << "PERDISTE :(";
+	}
+}
 
 int askNumber(string question, int high, int low) {
 	int number;
